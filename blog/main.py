@@ -3,6 +3,8 @@ from fastapi import Depends
 from . import schema, models
 from .database import engine, SessionLocal
 from sqlalchemy.orm import Session
+from typing import List
+from passlib.context import CryptContext
 
 app = FastAPI()
 models.Base.metadata.create_all(engine)
@@ -32,23 +34,38 @@ def delete(id, db: Session = Depends(get_db)):
 
 @app.put("/blog/{id}")
 def update(id, request: schema.Blog, db: Session = Depends(get_db)):
-    db.query(models.Blog)\
-        .filter(models.Blog.id == id)\
-        .update({"title" : "lansdn"})
+    blog = db.query(models.Blog).filter(models.Blog.id == id)
+    if not blog:
+        raise HTTPException(status = 404, details = "not found")
+    else:
+        db.query(models.Blog)\
+            .filter(models.Blog.id == id)\
+            .update({"title" : "lansdn"})
 
-    return "updates"
+        return "updates"
 
 
 
-@app.get("/blog")
+@app.get("/blog", response_model = List[schema.ShowBlog])
 def get_all(db: Session = Depends(get_db)):
     blogs = db.query(models.Blog).all()
     return blogs
 
-@app.get("/blog/{id}")
+@app.get("/blog/{id}", response_model = schema.ShowBlog)
 def show(id, response: Response, db: Session = Depends(get_db)):
     blog = db.query(models.Blog).filter(models.Blog.id == id).first()
     if not blog:
         raise HTTPException(status_code = 201, details = "Blog not found")
     response.status_code = 201
     return blog
+
+pwd_cxt = CryptContext(schemes = ["bcrypt"], deprecated = "auto")
+
+@app.post("/user")
+def create_user(request: schema.User,db: Session = Depends(get_db)):
+    hashedPassword = pwd.cxt.hash(request.paswword)
+    new_user = models.User(username = request.username, email = request.email, password = hasedPassword)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
