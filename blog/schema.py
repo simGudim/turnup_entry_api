@@ -1,3 +1,4 @@
+from sqlalchemy.sql.base import SchemaVisitor
 from pydantic import BaseModel
 
 class Blog(BaseModel):
@@ -14,3 +15,12 @@ class User(BaseModel):
     username: str
     password: str
     email: str
+
+class ShowUser(BaseModel):
+    username: str
+    email: str
+
+    class Config():
+        orm_mode = True
+
+
