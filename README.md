@@ -3,4 +3,4 @@
 
 
 <h3>Desired Pipeline</h3>
-![Alt text](https://github.com/simGudim/turnup/blob/master/images/ci_cd_pipeline.jpeg?raw=true "CI/CD")
+![Alt text](https://github.com/simGudim/turnup/blob/182aa099910ed9d754414adfdb640f1643a14bfa/images/ci_cd_pipeline.jpeg "CI/CD")
