@@ -1,8 +1,8 @@
+from .. import models, schema
+from ..utils import database, oauth2
+from ..utils.hashing import Hash
 from fastapi import APIRouter, Response, HTTPException
 from fastapi import Depends
-from .. import models, schema
-from ..utils.hashing import Hash
-from ..utils import database
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -10,6 +10,7 @@ router = APIRouter(
     tags = ["users"]
 )
 
+# creates a new user in the database and hashes the password
 @router.post("/", response_model = schema.ShowUser)
 def create_user(request: schema.User,response: Response, db: Session = Depends(database.get_db)):
     hashedPassword = Hash.bcrypt(request.password)
@@ -20,8 +21,14 @@ def create_user(request: schema.User,response: Response, db: Session = Depends(d
     response.status_code = 200
     return new_user
 
+
+# gets the user with a specific ID
 @router.get("/{id}", response_model = schema.ShowUser)
-def get_user(id: int, response: Response, db: Session = Depends(database.get_db)):
+def get_user(
+    id: int, response: Response, 
+    db: Session = Depends(database.get_db), 
+    current_user: schema.User = Depends(oauth2.get_current_user)
+):
     user = db.query(models.User)\
         .filter(models.User.id == id)\
         .first()
