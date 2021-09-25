@@ -20,7 +20,7 @@ def create_user(request: schema.User,response: Response, db: Session = Depends(d
     db.refresh(new_user)
     response.status_code = 200
     return new_user
-
+    
 
 # gets the user with a specific ID
 @router.get("/{id}", response_model = schema.ShowUser)
