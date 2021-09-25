@@ -1,2 +1,11 @@
 venv/
 __pycache__/
+node_modules/
+
+# testing for react
+/coverage
+
+# production for react
+/build
+
+
