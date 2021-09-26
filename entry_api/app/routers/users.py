@@ -27,6 +27,7 @@ def create_user(request: schema.User,response: Response, db: Session = Depends(d
 def get_user(
     id: int, response: Response, 
     db: Session = Depends(database.get_db), 
+    current_user: schema.User = Depends(oauth2.get_current_user)
 ):
     user = db.query(models.User)\
         .filter(models.User.id == id)\

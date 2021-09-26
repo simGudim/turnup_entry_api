@@ -22,7 +22,7 @@ RUN pip3 install -r ./app/requirements.txt
 
 # set the gunicorn logs
 ENV ACCESS_LOG=${ACCESS_LOG:-/proc/1/fd/1}
-ENV ERROR=${ERROR:-/proc/1/fd/2}
+ENV ERROR_LOG=${ERROR_LOG:-/proc/1/fd/2}
 
 ENTRYPOINT /usr/local/bin/gunicorn app.main:app -b 0.0.0.0:80 -w 4 -k uvicorn.workers.UvicornWorker
 
