@@ -8,4 +8,6 @@ node_modules/
 # production for react
 /build
 
+./entry_api/blog.db
+
 
