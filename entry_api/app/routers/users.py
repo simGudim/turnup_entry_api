@@ -21,13 +21,12 @@ def create_user(request: schema.User,response: Response, db: Session = Depends(d
     response.status_code = 200
     return new_user
     
-
+ # current_user: schema.User = Depends(oauth2.get_current_user)
 # gets the user with a specific ID
 @router.get("/{id}", response_model = schema.ShowUser)
 def get_user(
     id: int, response: Response, 
     db: Session = Depends(database.get_db), 
-    current_user: schema.User = Depends(oauth2.get_current_user)
 ):
     user = db.query(models.User)\
         .filter(models.User.id == id)\

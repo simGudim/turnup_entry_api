@@ -8,8 +8,16 @@ app = FastAPI()
 models.Base.metadata.create_all(engine)
 hashing = Hash()
 
+
+@app.get("/hey")
+def index():
+    return "hey"
+
 app.include_router(blogs.router)
 app.include_router(users.router)
 app.include_router(login.router)
+
+if __name__ == "__main__":
+    app.run()
 
 
