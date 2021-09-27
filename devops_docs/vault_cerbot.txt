@@ -1,0 +1,4 @@
+#Install certbot
+sudo apt install certbot
+sudo certbot certonly --standalone -d vault.bitsized.tech -> TODO this should be your domain
+
